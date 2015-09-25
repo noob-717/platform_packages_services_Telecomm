@@ -598,10 +598,7 @@ public class TelecomServiceImpl {
             try {
                 Log.startSession("TSI.gDPA");
                 // No need to synchronize
-                Resources resources = mContext.getResources();
-                return new ComponentName(
-                        resources.getString(R.string.ui_default_package),
-                        resources.getString(R.string.dialer_default_class));
+                return TelephonyUtil.getDialerComponentName(mContext);
             } finally {
                 Log.endSession();
             }
@@ -635,7 +632,12 @@ public class TelecomServiceImpl {
         public String getSystemDialerPackage() {
             try {
                 Log.startSession("TSI.gSDP");
-                return mContext.getResources().getString(R.string.ui_default_package);
+                String dialerPackage = null;
+                ComponentName component = TelephonyUtil.getDialerComponentName(mContext);
+                if (component != null) {
+                    dialerPackage = component.getPackageName();
+                }
+                return dialerPackage;
             } finally {
                 Log.endSession();
             }
